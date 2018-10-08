@@ -1289,7 +1289,34 @@ namespace ladice
             button8.BackColor = Color.Gainsboro;
             button9.BackColor = Color.Gainsboro;
 
-            
+            button1.Enabled = true;
+            button2.Enabled = true;
+            button3.Enabled = true;
+            button4.Enabled = true;
+            button5.Enabled = true;
+            button6.Enabled = true;
+            button7.Enabled = true;
+            button8.Enabled = true;
+            button9.Enabled = true;
+
+            label1.Visible = true;
+            label1.Text = " ";
+            label2.Visible = true;
+            label2.Text = " ";
+            label3.Visible = true;
+            label3.Text = " ";
+            label4.Visible = true;
+            label4.Text = " ";
+            label5.Visible = true;
+            label5.Text = " ";
+            label6.Visible = true;
+            label6.Text = " ";
+            label7.Visible = true;
+            label7.Text = " ";
+            label8.Visible = true;
+            label8.Text = " ";
+            label9.Visible = true;
+            label9.Text = " ";
 
             groupBox1.Enabled = true;
             groupBox3.Visible = false;
