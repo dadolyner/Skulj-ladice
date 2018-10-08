@@ -1278,16 +1278,7 @@ namespace ladice
 
         private void resetButton_Click(object sender, EventArgs e)
         {
-            //Leva stran
-            button1.BackColor = Color.Gainsboro;
-            button2.BackColor = Color.Gainsboro;
-            button3.BackColor = Color.Gainsboro;
-            button4.BackColor = Color.Gainsboro;
-            button5.BackColor = Color.Gainsboro;
-            button6.BackColor = Color.Gainsboro;
-            button7.BackColor = Color.Gainsboro;
-            button8.BackColor = Color.Gainsboro;
-            button9.BackColor = Color.Gainsboro;
+            
 
             button1.Enabled = true;
             button2.Enabled = true;
