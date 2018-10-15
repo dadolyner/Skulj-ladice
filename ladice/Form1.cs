@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 
 namespace ladice
 {
@@ -32,7 +33,16 @@ namespace ladice
         public int c = 1;
         public int d = 1;
         public int stzmag;
-        public int win = 1;
+        public int win1 = 0;
+        public int win2 = 0;
+        public int elo;
+        public int rank1;
+        public int rank2;
+
+        public bool elo1;
+        public bool elo2;
+
+
 
         //Streljanje ladijc NA LEVI STRANI
         private void button1_Click(object sender, EventArgs e)
@@ -54,6 +64,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
+                    win1 = win1 + 1;
                 }
 
                 else
@@ -90,6 +101,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
+                    win1 = win1 + 1;
                 }
                 else
                 {
@@ -125,6 +137,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
+                    win1 = win1 + 1;
                 }
                 else
                 {
@@ -160,6 +173,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
+                    win1 = win1 + 1;
                 }
                 else
                 {
@@ -194,6 +208,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
+                    win1 = win1 + 1;
                 }
                 else
                 {
@@ -229,6 +244,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
+                    win1 = win1 + 1;
                 }
                 else
                 {
@@ -264,6 +280,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
+                    win1 = win1 + 1;
                 }
 
                 else
@@ -300,6 +317,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
+                    win1 = win1 + 1;
                 }
                 else
                 {
@@ -335,6 +353,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
+                    win1 = win1 + 1;
                 }
                 else
                 {
@@ -666,7 +685,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
-                    win = win + 1;
+                    win2 = win2 + 1;
                 }
                 else
                 {
@@ -702,7 +721,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
-                    win = win + 1;
+                    win2 = win2 + 1;
                 }
                 else
                 {
@@ -737,7 +756,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
-                    win = win + 1;
+                    win2 = win2 + 1;
 
                 }
                 else
@@ -774,7 +793,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
-                    win = win + 1;
+                    win2 = win2 + 1;
                 }
                 else
                 {
@@ -809,7 +828,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
-                    win = win + 1;
+                    win2 = win2 + 1;
                 }
                 else
                 {
@@ -878,7 +897,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
-                    win = win + 1;
+                    win2 = win2 + 1;
                 }
                 else
                 {
@@ -913,7 +932,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
-                    win = win + 1;
+                    win2 = win2 + 1;
                 }
                 else
                 {
@@ -948,7 +967,7 @@ namespace ladice
                     groupBox1.Enabled = false;
                     groupBox2.Enabled = false;
                     submitbutton.Visible = true;
-                    win = win + 1;
+                    win2 = win2 + 1;
                 }
                 else
                 {
@@ -1389,11 +1408,115 @@ namespace ladice
             b = 1;
             c = 1;
             d = 1;
-            win = 1;
+            win1 = 0;
+            win2 = 0;
 
             textBox1.Text = "Player ONE, please set your SHIPS";
 
             submitbutton.Visible = false;
+
+            using (SQLiteConnection connect = new SQLiteConnection("data source=prijava.db"))
+            {
+                connect.Open();
+                using (SQLiteCommand com = new SQLiteCommand(connect))
+                {
+                    com.CommandText = "SELECT elo FROM uporabniki WHERE user='" + Form2.user1 + "';";
+                    SQLiteDataReader reader = com.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        rank1 = reader.GetInt32(0);
+                        elo1 = true;
+                    }
+                    com.Dispose();
+                }
+                connect.Close();
+            }
+
+            using (SQLiteConnection connect1 = new SQLiteConnection("data source=prijava.db"))
+            {
+                connect1.Open();
+                using (SQLiteCommand com = new SQLiteCommand(connect1))
+                {
+                    com.CommandText = "SELECT zmage FROM uporabniki WHERE user='" + Form2.user1 + "';";
+                    SQLiteDataReader reader = com.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        stzmag = reader.GetInt32(0);
+                        win1label.Text = "Wins: " + stzmag;
+                    }
+                    com.Dispose();
+                }
+                connect1.Close();
+
+
+            if (elo1 == true)
+            {
+                if (rank1 > 1)
+                {
+                    p1ranklabel.Text = "Rank: Silver";
+                    if (rank1 > 500)
+                    {
+                        p1ranklabel.Text = "Rank: Gold";
+                        if (rank1 > 1000)
+                        {
+                            p1ranklabel.Text = "Rank: Platinum";
+                            if (rank1 > 2000)
+                            {
+                                p1ranklabel.Text = "Rank: Diamond";
+                                if (rank1 > 5000)
+                                {
+                                    p1ranklabel.Text = "Rank: Champion";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            using (SQLiteConnection connect2 = new SQLiteConnection("data source=prijava.db"))
+            {
+                connect2.Open();
+                using (SQLiteCommand com = new SQLiteCommand(connect2))
+                {
+                    com.CommandText = "SELECT elo FROM uporabniki WHERE user='" + Form2.user2 + "';";
+                    SQLiteDataReader reader = com.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                            stzmag = reader.GetInt32(0);
+                            win2label.Text = "Wins: " + stzmag;
+                    }
+                    com.Dispose();
+                }
+                connect2.Close();
+            }
+                if (elo2 == true)
+                {
+                    if (rank2 > 1)
+                    {
+                        p2ranklabel.Text = "Rank: Silver";
+                        if (rank2 > 500)
+                        {
+                            p2ranklabel.Text = "Rank: Gold";
+                            if (rank2 > 1000)
+                            {
+                                p2ranklabel.Text = "Rank: Platinum";
+                                if (rank2 > 2000)
+                                {
+                                    p2ranklabel.Text = "Rank: Diamond";
+                                    if (rank2 > 5000)
+                                    {
+                                        p2ranklabel.Text = "Rank: Champion";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void button19_Click(object sender, EventArgs e)
@@ -1407,21 +1530,64 @@ namespace ladice
             resetButton.Visible = true;
 
 
-
-            if (win == 1)
+            //Če zmaga Player 1
+            if (win1 == 1)
+                rank1 = rank1 + 20;
             {
                 using (SQLiteConnection connect = new SQLiteConnection("data source=prijava.db"))
                 {
                     connect.Open();
                     using (SQLiteCommand com = new SQLiteCommand(connect))
                     {
-                        com.CommandText = "SELECT zmage FROM uporabniki WHERE ime='" + Form2.user1 + "';";
+                        com.CommandText = "SELECT zmage FROM uporabniki WHERE user='" + Form2.user1 + "';";
                         SQLiteDataReader reader = com.ExecuteReader();
 
                         while (reader.Read())
                         {
                             stzmag = reader.GetInt32(0);
-                            stzmag++;
+                            stzmag = stzmag + win1;
+                            win1label.Text = "Wins: " + stzmag;
+                        }
+                        com.Dispose();
+                    }
+                    connect.Close();
+                }
+                
+
+                using (SQLiteConnection connect1 = new SQLiteConnection("data source=prijava.db"))
+                {
+                    connect1.Open();
+                    using (SQLiteCommand com = new SQLiteCommand(connect1))
+                    {
+                        com.CommandText = "UPDATE uporabniki SET zmage = " +stzmag+ ", elo = " +rank1+ " WHERE user='" + Form2.user1 + "';";
+                        com.ExecuteNonQuery();
+                        com.Dispose();
+                    }
+                    connect1.Close();
+                }
+
+
+            }
+
+
+            //Če zmaga Player 2
+            if (win2 == 1)
+                rank2 = rank2 + 20;
+            {
+                
+                using (SQLiteConnection connect = new SQLiteConnection("data source=prijava.db"))
+                {
+                    connect.Open();
+                    using (SQLiteCommand com = new SQLiteCommand(connect))
+                    {
+                        com.CommandText = "SELECT zmage FROM uporabniki WHERE user='" + Form2.user2 + "';";
+                        SQLiteDataReader reader = com.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            stzmag = reader.GetInt32(0);
+                            stzmag = stzmag + win2;
+                            win2label.Text = "Wins: " + stzmag;
                         }
                         com.Dispose();
                     }
@@ -1429,51 +1595,171 @@ namespace ladice
                 }
 
                 using (SQLiteConnection connect1 = new SQLiteConnection("data source=prijava.db"))
-                {
-                    connect1.Open();
-                    using (SQLiteCommand com = new SQLiteCommand(connect1))
-                    {
-                        com.CommandText = "UPDATE uporabniki SET zmage = " +stzmag+ " WHERE ime='" + Form2.user1 + "';";
-                        com.ExecuteNonQuery();
-                        com.Dispose();
-                    }
-                    connect1.Close();
-                }                
-            }
-
-            else
-            {
-                using (SQLiteConnection connect = new SQLiteConnection("data source=prijava.db"))
-                {
-                    connect.Open();
-                    using (SQLiteCommand com = new SQLiteCommand(connect))
-                    {
-                        com.CommandText = "SELECT zmage FROM uporabniki WHERE ime='" + Form2.user2 + "';";
-                        SQLiteDataReader reader = com.ExecuteReader();
-
-                        while (reader.Read())
-                        {
-                            stzmag = reader.GetInt32(0);
-                            stzmag++;
-                        }
-                        com.Dispose();
-                    }
-                    connect.Close();
-                }
-
-
-                    using (SQLiteConnection connect1 = new SQLiteConnection("data source=prijava.db"))
                     {
                         connect1.Open();
                         using (SQLiteCommand com = new SQLiteCommand(connect1))
                         {
-                            com.CommandText = "UPDATE uporabniki SET zmage = " +stzmag+ " WHERE ime='" + Form2.user2 + "';";
+                            com.CommandText = "UPDATE uporabniki SET zmage = " +stzmag+ ", elo = " +rank2+ " WHERE user='" + Form2.user2 + "';";
                             com.ExecuteNonQuery();
                             com.Dispose();
                         }
                         connect1.Close();
                     }
+            }
+    }
+
+
+        //na štartu aplikacije
+        //elo za p1
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+            using (SQLiteConnection connect = new SQLiteConnection("data source=prijava.db"))
+            {
+                connect.Open();
+                using (SQLiteCommand com = new SQLiteCommand(connect))
+                {
+                    com.CommandText = "SELECT elo FROM uporabniki WHERE user='" + Form2.user1 + "';";
+                    SQLiteDataReader reader = com.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        rank1 = reader.GetInt32(0);
+                        elo1 = true;
+                    }
+                    com.Dispose();
+                }
+                connect.Close();
+            }
+            //wins za p1
+            using (SQLiteConnection connect1 = new SQLiteConnection("data source=prijava.db"))
+            {
+                connect1.Open();
+                using (SQLiteCommand com = new SQLiteCommand(connect1))
+                {
+                    com.CommandText = "SELECT zmage FROM uporabniki WHERE user='" + Form2.user1 + "';";
+                    SQLiteDataReader reader = com.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        stzmag = reader.GetInt32(0);
+                        win1label.Text = "Wins: " + stzmag;
+                    }
+                    com.Dispose();
+                }
+                connect1.Close();
+            }
+
+                if (elo1 == true)
+            {
+                if (rank1 > 1)
+                {
+                    p1ranklabel.Text = "Rank: Silver";
+                    if (rank1 > 500)
+                    {
+                        p1ranklabel.Text = "Rank: Gold";
+                        if (rank1 > 1000)
+                        {
+                            p1ranklabel.Text = "Rank: Platinum";
+                            if (rank1 > 2000)
+                            {
+                                p1ranklabel.Text = "Rank: Diamond";
+                                if (rank1 > 5000)
+                                {
+                                    p1ranklabel.Text = "Rank: Champion";
+                                }
+                            }
+                        }
+                    }
                 }
             }
+
+            //elo za p2
+            using (SQLiteConnection connect2 = new SQLiteConnection("data source=prijava.db"))
+            {
+                connect2.Open();
+                using (SQLiteCommand com = new SQLiteCommand(connect2))
+                {
+                    com.CommandText = "SELECT elo FROM uporabniki WHERE user='" + Form2.user2 + "';";
+                    SQLiteDataReader reader = com.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        rank2 = reader.GetInt32(0);
+                        elo2 = true;
+                    }
+                    com.Dispose();
+                }
+                connect2.Close();
+            }
+                //wins za p2
+                using (SQLiteConnection connect3 = new SQLiteConnection("data source=prijava.db"))
+                {
+                    connect3.Open();
+                    using (SQLiteCommand com = new SQLiteCommand(connect3))
+                    {
+                        com.CommandText = "SELECT zmage FROM uporabniki WHERE user='" + Form2.user2 + "';";
+                        SQLiteDataReader reader = com.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            stzmag = reader.GetInt32(0);
+                            win2label.Text = "Wins: " + stzmag;
+                        }
+                        com.Dispose();
+                    }
+                    connect3.Close();
+                }
+
+                    if (elo2 == true)
+            {
+                if (rank2 > 1)
+                {
+                    p2ranklabel.Text = "Rank: Silver";
+                    if (rank2 > 500)
+                    {
+                        p2ranklabel.Text = "Rank: Gold";
+                        if (rank2 > 1000)
+                        {
+                            p2ranklabel.Text = "Rank: Platinum";
+                            if (rank2 > 2000)
+                            {
+                                p2ranklabel.Text = "Rank: Diamond";
+                                if (rank2 > 5000)
+                                {
+                                    p2ranklabel.Text = "Rank: Champion";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            /*
+            try
+            {
+                string myconnection = "datasource=den1.mysql3.gear.host;port=3306;username=uporabniki;password=-techdeck12345;";
+                MySqlConnection connect = new MySqlConnection(myconnection);
+                MySqlDataAdapter myadapter = new MySqlDataAdapter();
+                myadapter.SelectCommand = new MySqlCommand("SELECT * uporabniki.accounts;", connect);
+                connect.Open();
+                DataSet ds = new DataSet();
+                MessageBox.Show("Connected");
+                connect.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Napaka: " + ex);
+            }
+            */
+        }
+
+        private void logoutbutton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Form2 f2 = new Form2();
+            f2.ShowDialog();
         }
     }
+}

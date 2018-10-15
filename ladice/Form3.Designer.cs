@@ -159,8 +159,10 @@
             this.ClientSize = new System.Drawing.Size(449, 308);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.groupBox2);
+            this.MaximizeBox = false;
             this.Name = "Form3";
             this.Text = "Registration";
+            this.Load += new System.EventHandler(this.Form3_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);

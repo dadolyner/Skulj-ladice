@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using MySql.Data.MySqlClient;
+using System.Security.Cryptography;
 
 namespace ladice
 {
@@ -29,33 +31,69 @@ namespace ladice
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            if (nametextBox.Text == "" || usertextBox.Text == "" || password.Text == "" || checkpassword.Text == "")
+            if (nametextBox.Text.Contains("SELECT") || nametextBox.Text.Contains("UPDATE") || nametextBox.Text.Contains("DELETE") || nametextBox.Text.Contains("INSERT"))
             {
-                MessageBox.Show("Nobeno polje ne sme biti prazno!");         
+                nametextBox.Text = "";
+                usertextBox.Text = "";
+                password.Text = "";
+                checkpassword.Text = "";
+                MessageBox.Show("Opale");
             }
 
-            if (password.Text != checkpassword.Text)
-            {
-                if (checkpassword.Text != "")
-                {
-                    MessageBox.Show("Gesli se ne ujemata!");
-                }
-            }
             else
             {
-                using (SQLiteConnection connect = new SQLiteConnection("data source=prijava.db"))
+
+                if (nametextBox.Text == "" || usertextBox.Text == "" || password.Text == "" || checkpassword.Text == "")
                 {
-                    connect.Open();
-                    using (SQLiteCommand com = new SQLiteCommand(connect))
+                    MessageBox.Show("Nobeno polje ne sme biti prazno!");
+                }
+
+                if (password.Text != checkpassword.Text)
+                {
+                    if (checkpassword.Text != "")
                     {
-                        com.CommandText = "INSERT INTO uporabniki (ime, user, password) VALUES('" + nametextBox.Text + "' , '" + usertextBox.Text + "' , '" + password.Text + "')";
-                        com.ExecuteNonQuery();
-                        com.Dispose();
+                        MessageBox.Show("Gesli se ne ujemata!");
                     }
-                    connect.Close();
+                }
+                else
+                {
+                    using (SQLiteConnection connect = new SQLiteConnection("data source=prijava.db"))
+                    {
+                        connect.Open();
+                        using (SQLiteCommand com = new SQLiteCommand(connect))
+                        {
+                            com.CommandText = "INSERT INTO uporabniki (ime, user, password) VALUES('" + nametextBox.Text + "' , '" + usertextBox.Text + "' , '" + password.Text + "')";
+                            com.ExecuteNonQuery();
+                            com.Dispose();
+                        }
+                        connect.Close();
+                    }
                 }
             }
+        }
+
+        private void Form3_Load(object sender, EventArgs e)
+        {
+
+            /*
+            try
+            {
+                string myconnection = "datasource=den1.mysql3.gear.host;port=3306;username=uporabniki;password=-techdeck12345;";
+                MySqlConnection connect = new MySqlConnection(myconnection);
+                MySqlDataAdapter myadapter = new MySqlDataAdapter();
+                myadapter.SelectCommand = new MySqlCommand("SELECT * uporabniki.accounts;", connect);
+                connect.Open();
+                DataSet ds = new DataSet();
+                MessageBox.Show("Connected");
+                connect.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Napaka: " + ex);
+            }
+            */
         }
     }
 }
